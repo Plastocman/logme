@@ -6,17 +6,20 @@ import imp
 import ast
 from ast_transformer import LogExceptions
 
+
 class LoggerLoader(object):
     """
     helper class to load module. We do nothing on load_module call,
     the patch is done in the find_module method
     No need to expose it ?
     """
+
     def __init__(self, module):
         self.module = module
 
     def load_module(self, fullname):
         return self.module
+
 
 class LoggerImporter(object):
 
@@ -30,10 +33,10 @@ class LoggerImporter(object):
         :param: include: the list of the includes you do want to patch
         :param: exclude: the list of files you don't want to patch, e.g.
                 modules where catching errors is part of the program flow
-                (common examples are StopIteration), or modules that catch 
+                (common examples are StopIteration), or modules that catch
                 too many exceptions that pollute your log file.
 
-        Instances of this class will patch files iff their full names 
+        Instances of this class will patch files iff their full names
         (i.e. full path) contains `include` and not any element of `exclude`
 
         Note : it is not recommended to patch big complex frameworks
@@ -43,7 +46,7 @@ class LoggerImporter(object):
         If you want to  patch a django app
         you should add `django' in the exclude list.
         """
-        
+
         self.log_file = log_file
         self.include = include
         self.exclude = exclude or []
@@ -55,7 +58,7 @@ class LoggerImporter(object):
         compile it and add the generated compiled code file to sys.modules.
         If not, just apply usual import/compilation/exectution.
 
-        When this method returns None, Python will fallback to usual 
+        When this method returns None, Python will fallback to usual
         import, and no patch will be applied, hence the early returns.
 
         When it returns a Loader object (i.e. an object that provides
@@ -64,14 +67,12 @@ class LoggerImporter(object):
 
         for forbidden_name in self.exclude:
             if forbidden_name in fullname:
-                    return
-
+                return
 
         # this prevents patching outside your package
         # 'path' evaluates to `False` if not in a package
         if self.include not in fullname:
             return
-
 
         # note : `file` is just a  python fileobject
         # with the absolute path on your filesystem as name attribute
@@ -89,7 +90,8 @@ class LoggerImporter(object):
         tree = ast.parse(src)
 
         # this is where the magic happens
-        tree = LogExceptions(self.include, self.log_file, fullname, path).visit(tree)
+        tree = LogExceptions(self.include, self.log_file,
+                             fullname, path).visit(tree)
 
         # some boilerplate
         module = sys.modules.setdefault(fullname, imp.new_module(fullname))
@@ -115,16 +117,16 @@ class LoggerImporter(object):
         return LoggerLoader(module)
 
 
-
 def do_hook(log_file='/dev/stdout', include='', exclude=None):
     """
     :param: string log_file: the name of the file you want to write the logs in
     :param: string include: the include you want to patch. It will apply
-        the patch if and only if `include` is found as a substring of the module
-        full path. Default to empty string, meaning you will patch everything. 
+        the patch if and only if `include` is found as a substring of the
+        module full path.
+        Default to empty string, meaning you will patch everything.
         Not recommended though, you better filter it.
     :param: list exclude: the names of the modules you don't want to patch
     """
     sys.meta_path.append(LoggerImporter(log_file=log_file,
                                         include=include,
-                                        exclude=exclude))  
+                                        exclude=exclude))

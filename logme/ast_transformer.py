@@ -5,7 +5,7 @@ def tree_factory(template, **identifiers):
     """
     :param: string: template: the source code you want to inject
     :param: dict identifiers: the variables you want to inject in your template
-       
+
 
     """
     source = template.format(**identifiers)
@@ -29,9 +29,9 @@ class LogExceptions(NodeTransformer):
     """
 
     def __init__(self, package, log_file, *args, **kw):
-       """The `NodeTransformer` class has no __init__ method"""
-       self.log_code = log_code
-       self.log_file = log_file
+        """The `NodeTransformer` class has no __init__ method"""
+        self.log_code = log_code
+        self.log_file = log_file
 
     def visit_ExceptHandler(self, node):
         """adds logging after each caught exception in the program"""

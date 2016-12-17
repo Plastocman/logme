@@ -9,6 +9,8 @@ I was written in 2 days by someone trying to teach herself Python,
 and you're gonna love me.
 """
 
+
+
 def some_stupid_function(mutable_shared_state, *args, **kw):
     """does something"""
 
@@ -18,16 +20,15 @@ def some_stupid_function(mutable_shared_state, *args, **kw):
         mutable_shared_state[0] += 1
         try:
             if obj.is_ready:
-                x = 2/0
+                x = 2 / 0
         except Exception:
             raise Exception()
 
     except:
         pass
-        
-        
-    
-some_list = [0,1,2,3]
+
+
+some_list = [0, 1, 2, 3]
 try:
     someList[0] += 3
 except NameError:
