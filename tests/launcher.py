@@ -1,2 +1,2 @@
-from logme import do_hook; do_hook()
+from logme import hook_imports; hook_imports()
 import legacy

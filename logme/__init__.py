@@ -1,1 +1,1 @@
-from import_hook import do_hook
+from import_hook import hook_imports

@@ -39,12 +39,18 @@ class LoggerImporter(object):
         Instances of this class will patch files iff their full names
         (i.e. full path) contains `include` and not any element of `exclude`
 
-        Note : it is not recommended to patch big complex frameworks
+        Note 1 : it is not recommended to patch big complex frameworks
         (e.g. Django, Twisted) as that usually just won't work for they
         already hacked import/parsing.
-
         If you want to  patch a django app
         you should add `django' in the exclude list.
+
+        Note 2 : if your application changes user during execution, 
+        it may raise an IOError when you try to write in the log file
+        because of read/write permissions.
+        You must be aware of that, I will add a helper 
+        context manager to help dealing with that.
+
         """
 
         self.log_file = log_file
@@ -70,7 +76,7 @@ class LoggerImporter(object):
                 return
 
         # this prevents patching outside your package
-        # 'path' evaluates to `False` if not in a package
+        # 'path' evaluates to `False` if file is not in a package
         if self.include not in fullname:
             return
 
@@ -105,10 +111,12 @@ class LoggerImporter(object):
         # bytecode execution + module namespace filling, as usual
         try:
             exec code in module.__dict__
+
         # This happens when the execution of the module code itself crashes
         # I have no idea what to do with that, so I just fallback to normal
         # compilation/execution. Maybe add some logging ? You shouldn't
         # worry too much about that, as it's not related to the patching itself
+        # but it's actually an error in the source.
         except Exception as e:
             with open(self.log_file, "a") as f:
                 f.write("exec failed in {} : {}\n".format(fullname, e))
@@ -117,7 +125,7 @@ class LoggerImporter(object):
         return LoggerLoader(module)
 
 
-def do_hook(log_file='/dev/stdout', include='', exclude=None):
+def hook_imports(log_file='/dev/stdout', include='', exclude=None):
     """
     :param: string log_file: the name of the file you want to write the logs in
     :param: string include: the include you want to patch. It will apply

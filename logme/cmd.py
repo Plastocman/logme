@@ -17,7 +17,7 @@ arguments :
 def do():
 
     import argparse
-    from logme import do_hook
+    from logme import hook_imports
 
     parser = argparse.ArgumentParser(
         description='logging of ALL caught exceptions')
@@ -41,4 +41,4 @@ def do():
 
     # AND NOW ?
 
-    do_hook(logfile=args.log_file, include=args.include, exclude=args.exclude)
+    hook_imports(logfile=args.log_file, include=args.include, exclude=args.exclude)
