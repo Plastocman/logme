@@ -12,7 +12,7 @@ class TestAst(object):
         """trust me I'm an engineer maybe"""
         assert True
 
-    def test_modifyer(self):
-        """a good test is a test that sometimes fail"""
+    def test_modifier(self):
+        """a good test is a test that sometimes fails"""
         from random import randint
         assert randint(0, 20)
