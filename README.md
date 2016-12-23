@@ -1,6 +1,8 @@
 # Python error logger
 
-logme uses a powerful combination of import hooks and abstract syntax trees rewriting to log every exception (with their tracebacks) that is caught by your code, even those who have been silenced out by distracted programmers.
+Stuck with legacy code ? Python can help.
+
+Logme uses a combination of import hooks and abstract syntax trees rewriting to log every exception (with their tracebacks) that is caught by your code, even those who have been silenced out by distracted programmers.
 
 For those who know, this is pretty much the opposite of [fuckit](https://github.com/ajalt/fuckitpy)
 
