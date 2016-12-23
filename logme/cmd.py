@@ -3,6 +3,7 @@
 """
 This code is dirty
 command-line script
+TODO : make it work
 """
 
 """
@@ -15,6 +16,7 @@ arguments :
 
 
 def do():
+    """not working yet, don't try to use it."""
 
     import argparse
     from logme import hook_imports
@@ -22,7 +24,7 @@ def do():
     parser = argparse.ArgumentParser(
         description='logging of ALL caught exceptions')
 
-    parser.add_argument('-in', '--include', nargs='+', dest='include',
+    parser.add_argument('-in', '--required', nargs='+', dest='required',
                         help="the name of the package you want to patch")
 
     parser.add_argument('-ex', '--exclude', nargs='*',
@@ -41,4 +43,4 @@ def do():
 
     # AND NOW ?
 
-    hook_imports(logfile=args.log_file, include=args.include, exclude=args.exclude)
+    hook_imports(log_file=args.log_file, required=args.include, exclude=args.exclude, packaged=False)
