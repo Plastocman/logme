@@ -1,7 +1,7 @@
 # TODO unittest : input some ast, patch it and check the output
 
 # TODO functest : build package with all kinds of weird exceptions,
-# and check they appear in some kind of stdout
+# and check they appear in some kind of stderr
 
 # Next year maybe ?
 
