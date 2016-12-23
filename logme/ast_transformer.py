@@ -1,3 +1,7 @@
+"""This is the main module.
+This implements an ast visitor that will modify every ExceptHandler node
+to add a logging statement as its first element."""
+
 from ast import parse, NodeTransformer, Name, Store, fix_missing_locations
 
 
@@ -33,7 +37,6 @@ def tree_factory(template, **identifiers):
                )
 
 
-
     """
     source = template.format(**identifiers)
     return parse(source).body
@@ -64,8 +67,13 @@ class LogExceptions(NodeTransformer):
 
     def visit_ExceptHandler(self, node):
         """This is the main method
-        it adds a logging statement after each except handler in
-        your code abstract syntax trees"""
+        this is a callback that will be called every time the visitor meets
+        an ExceptHanlder node.
+
+        It will add a logging ast node as first element of the ExceptHandler
+        body. In other terms, it will add a logging statement right after each
+        exception catching statement.
+        """
 
         # does the node have a name for the caught exception ?
         try:
